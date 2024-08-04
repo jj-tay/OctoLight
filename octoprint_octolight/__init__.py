@@ -54,11 +54,13 @@ class OctoLightPlugin(
 		self._logger.info("--------------------------------------------")
 
 		# Setting the default state of pin
-		GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.OUT)
+		#GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.OUT)
 		if bool(self._settings.get(["inverted_output"])):
-			GPIO.output(int(self._settings.get(["light_pin"])), GPIO.HIGH)
+			#GPIO.output(int(self._settings.get(["light_pin"])), GPIO.HIGH)
+			GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.OUT)
 		else:
-			GPIO.output(int(self._settings.get(["light_pin"])), GPIO.LOW)
+			#GPIO.output(int(self._settings.get(["light_pin"])), GPIO.LOW)
+			GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.IN)
 
 		#Because light is set to ff on startup we don't need to retrieve the current state
 		"""
@@ -77,15 +79,17 @@ class OctoLightPlugin(
 
 	def light_toggle(self):
 		# Sets the GPIO every time, if user changed it in the settings.
-		GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.OUT)
+		#GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.OUT)
 
 		self.light_state = not self.light_state
 
 		# Sets the light state depending on the inverted output setting (XOR)
 		if self.light_state ^ self._settings.get(["inverted_output"]):
-			GPIO.output(int(self._settings.get(["light_pin"])), GPIO.HIGH)
+			#GPIO.output(int(self._settings.get(["light_pin"])), GPIO.HIGH)
+			GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.OUT)
 		else:
-			GPIO.output(int(self._settings.get(["light_pin"])), GPIO.LOW)
+			#GPIO.output(int(self._settings.get(["light_pin"])), GPIO.LOW)
+			GPIO.setup(int(self._settings.get(["light_pin"])), GPIO.IN)
 
 		self._logger.info("Got request. Light state: {}".format(
 			self.light_state
@@ -124,25 +128,25 @@ class OctoLightPlugin(
 			self._plugin_manager.send_plugin_message(self._identifier, dict(isLightOn=self.light_state))
 			return
 
-	def get_update_information(self):
-		return dict(
-			octolight=dict(
-				displayName="OctoLight",
-				displayVersion=self._plugin_version,
-
-				type="github_release",
-				current=self._plugin_version,
-
-				user="gigibu5",
-				repo="OctoLight",
-				pip="https://github.com/gigibu5/OctoLight/archive/{target}.zip"
-			)
-		)
+	# def get_update_information(self):
+	# 	return dict(
+	# 		octolight=dict(
+	# 			displayName="OctoLight",
+	# 			displayVersion=self._plugin_version,
+	#
+	# 			type="github_release",
+	# 			current=self._plugin_version,
+	#
+	# 			user="gigibu5",
+	# 			repo="OctoLight",
+	# 			pip="https://github.com/gigibu5/OctoLight/archive/{target}.zip"
+	# 		)
+	# 	)
 
 __plugin_pythoncompat__ = ">=2.7,<4"
 __plugin_implementation__ = OctoLightPlugin()
 
-__plugin_hooks__ = {
-	"octoprint.plugin.softwareupdate.check_config":
-	__plugin_implementation__.get_update_information
-}
+# __plugin_hooks__ = {
+# 	"octoprint.plugin.softwareupdate.check_config":
+# 	__plugin_implementation__.get_update_information
+# }

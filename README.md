@@ -1,3 +1,5 @@
+A modification to OctoLight to use a weird relay module I bought. The relay model cannot understand GPIO.HIGH and GPIO.LOW.
+
 # OctoLight
 A simple plugin that adds a button to the navigation bar for toggleing a GPIO pin on the Raspberry Pi.
 
